@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap');
+@import "tailwindcss";
+
+
+html, body, #root { height: 100%; }
+
+
+:root[data-theme="light"] {
+  --bg: #fff7fb;           /* rosa muy muy claro */
+  --card: #ffeef8;         /* paneles */
+  --text: #442a40;         /* ciruela suave */
+  --accent: #d36bb3;       /* rosa malva */
+  --accent-2: #f2b6d6;
+}
+
+:root[data-theme="dark"] {
+  --bg: #2a1f29;           /* ciruela oscura */
+  --card: #352433;         /* un toque más claro para paneles */
+  --text: #f6e8f2;         /* texto crema-rosado */
+  --accent: #f09ac7;       /* rosa pastel brillante */
+  --accent-2: #d782ba;
+}
+
+:root[data-theme="pink"] { /* default */
+  --bg: #ffe6ef;
+  --card: #ffe4f1;
+  --text: #4a2745;
+  --accent: #e06ab8;
+  --accent-2: #f7b3d7;
+}
+
+:root {
+  --surface: color-mix(in oklab, var(--text) 5%, transparent);
+  --surface-2: color-mix(in oklab, var(--text) 9%, transparent);
+  --border-1: color-mix(in oklab, var(--text) 12%, transparent);
+  --border-2: color-mix(in oklab, var(--text) 18%, transparent);
+  --shadow-1: 0 2px 8px rgba(0,0,0,.06);
+  --shadow-2: 0 6px 18px rgba(0,0,0,.08);
+}
+
+
+body{ background:var(--bg); color:var(--text); font-family:Inter,system-ui,sans-serif; }
+
+/* Ocultar scrollbars pero permitir scroll con wheel/touch */
+.no-scrollbars { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbars::-webkit-scrollbar { width: 0; height: 0; }
+
+/* Inputs number sin spinners, alto consistente */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* Borde/sombras suaves basados en theme (usa tus vars existentes) */
+:root {
+  --border-1: color-mix(in oklab, var(--text) 14%, transparent);
+  --border-2: color-mix(in oklab, var(--text) 22%, transparent);
+  --surface:  color-mix(in oklab, var(--bg) 92%, var(--text) 8%);
+  --shadow-1: 0 4px 12px color-mix(in oklab, var(--text) 10%, transparent);
+}
+
+/* Evitar overflow lateral por sombras o redondeos */
+.clip-edge { overflow-x: hidden; clip-path: inset(0 0 0 0 round 0); }
