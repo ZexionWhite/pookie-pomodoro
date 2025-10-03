@@ -11,7 +11,6 @@ const DEFAULTS = {
   tickSound: true,
   notifications: true,
   alwaysOnTop: true,
-  // ⬇️ volumen/muted ya NO se guardan acá (viven en App para evitar resets)
 };
 
 export default function ConfigPanel({
@@ -21,7 +20,6 @@ export default function ConfigPanel({
   setTheme,
   durations,
   setDurations,
-  // ⬇️ vienen de App (persistentes y únicos)
   volume,
   setVolume,
   muted,
@@ -35,7 +33,7 @@ export default function ConfigPanel({
     alwaysOnTop: DEFAULTS.alwaysOnTop,
   });
 
-  // Load desde LS (solo theme/durations/opts; NO volumen/muted)
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem(LS_KEY);
@@ -46,17 +44,17 @@ export default function ConfigPanel({
         if (saved.opts) setOpts((o) => ({ ...o, ...saved.opts }));
       }
     } catch {}
-    // eslint-disable-next-line
+
   }, []);
 
-  // Save a LS (sin volume/muted)
+
   const snap = useMemo(() => ({ theme, durations, opts }), [theme, durations, opts]);
   useEffect(() => {
     const t = setTimeout(() => localStorage.setItem(LS_KEY, JSON.stringify(snap)), 120);
     return () => clearTimeout(t);
   }, [snap]);
 
-  // Helpers
+
   const setOpt = (k, v) => setOpts((o) => ({ ...o, [k]: v }));
   const updDur = (k, v) =>
     setDurations((d) => ({ ...d, [k]: Math.max(1, Math.min(180, Number(v || 0))) }));
@@ -72,11 +70,10 @@ export default function ConfigPanel({
       notifications: DEFAULTS.notifications,
       alwaysOnTop: DEFAULTS.alwaysOnTop,
     });
-    // ⬇️ también podés decidir resetear audio global acá si querés:
-    // setVolume(0.7); setMuted(false);
+
   };
 
-  // Always on top
+
   useEffect(() => {
     (async () => {
       try {
@@ -86,7 +83,7 @@ export default function ConfigPanel({
     })();
   }, [opts.alwaysOnTop]);
 
-  // Tick preview (usa volume/muted reales)
+
   const beep = () => {
     if (!opts.tickSound) return;
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -94,7 +91,7 @@ export default function ConfigPanel({
     const g = ctx.createGain();
     o.type = "sine";
     o.frequency.value = 880;
-    g.gain.value = (muted ? 0 : volume) * 0.2; // ⬅️ clave: usa audio global
+    g.gain.value = (muted ? 0 : volume) * 0.2; 
     o.connect(g);
     g.connect(ctx.destination);
     o.start();
@@ -129,7 +126,6 @@ export default function ConfigPanel({
         </button>
       </div>
 
-      {/* Scroll area SIN barras visibles */}
       <div className="grow overflow-auto no-scrollbars px-3 pb-3 space-y-3">
         {/* Durations (vertical) */}
         <Card title="Pomodoro lengths">
@@ -170,7 +166,6 @@ export default function ConfigPanel({
           />
         </Card>
 
-        {/* Theme */}
         <Card title="Theme">
           <Segmented
             value={theme}
@@ -183,7 +178,6 @@ export default function ConfigPanel({
           />
         </Card>
 
-        {/* Behaviour */}
         <Card title="Behaviour">
           <Toggle
             label="Auto-start next session"
@@ -213,7 +207,6 @@ export default function ConfigPanel({
 
           <Divider />
 
-          {/* Audio global (usa props) */}
           <div className="flex items-center justify-between text-xs font-medium text-[var(--text)]/75 mb-1">
             <span className="inline-flex items-center gap-2">
               {muted ? <FiVolumeX /> : <FiVolume2 />} Volume
@@ -271,7 +264,6 @@ export default function ConfigPanel({
   );
 }
 
-/* ------------ UI helpers (vertical, minimal) ------------- */
 
 function Card({ title, children }) {
   return (

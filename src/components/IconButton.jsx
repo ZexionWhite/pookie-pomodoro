@@ -2,8 +2,8 @@ export default function IconButton({
   title,
   onClick,
   children,
-  variant = "ghost", // "ghost" | "filled"
-  size = "md", // "sm" | "md" | "lg"
+  variant = "ghost",
+  size = "md",
   className = ""
 }) {
   const dims =

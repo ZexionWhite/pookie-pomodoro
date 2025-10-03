@@ -6,22 +6,22 @@ html, body, #root { height: 100%; }
 
 
 :root[data-theme="light"] {
-  --bg: #fff7fb;           /* rosa muy muy claro */
-  --card: #ffeef8;         /* paneles */
-  --text: #442a40;         /* ciruela suave */
-  --accent: #d36bb3;       /* rosa malva */
+  --bg: #fff7fb;
+  --card: #ffeef8;
+  --text: #442a40;
+  --accent: #d36bb3;
   --accent-2: #f2b6d6;
 }
 
 :root[data-theme="dark"] {
-  --bg: #2a1f29;           /* ciruela oscura */
-  --card: #352433;         /* un toque más claro para paneles */
-  --text: #f6e8f2;         /* texto crema-rosado */
-  --accent: #f09ac7;       /* rosa pastel brillante */
+  --bg: #2a1f29;
+  --card: #352433;
+  --text: #f6e8f2;
+  --accent: #f09ac7;
   --accent-2: #d782ba;
 }
 
-:root[data-theme="pink"] { /* default */
+:root[data-theme="pink"] {
   --bg: #ffe6ef;
   --card: #ffe4f1;
   --text: #4a2745;
@@ -41,15 +41,12 @@ html, body, #root { height: 100%; }
 
 body{ background:var(--bg); color:var(--text); font-family:Inter,system-ui,sans-serif; }
 
-/* Ocultar scrollbars pero permitir scroll con wheel/touch */
 .no-scrollbars { scrollbar-width: none; -ms-overflow-style: none; }
 .no-scrollbars::-webkit-scrollbar { width: 0; height: 0; }
 
-/* Inputs number sin spinners, alto consistente */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-/* Borde/sombras suaves basados en theme (usa tus vars existentes) */
 :root {
   --border-1: color-mix(in oklab, var(--text) 14%, transparent);
   --border-2: color-mix(in oklab, var(--text) 22%, transparent);
@@ -57,5 +54,4 @@ input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; marg
   --shadow-1: 0 4px 12px color-mix(in oklab, var(--text) 10%, transparent);
 }
 
-/* Evitar overflow lateral por sombras o redondeos */
 .clip-edge { overflow-x: hidden; clip-path: inset(0 0 0 0 round 0); }

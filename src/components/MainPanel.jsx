@@ -10,17 +10,17 @@ import IconButton from "./IconButton";
 export default function MainPanel({
   onConfig,
   onMinimizeRequested,
-  theme,          // reservado
-  setTheme,       // reservado
+  theme,        
+  setTheme,     
   durations,
-  volume,         // viene de App (persistente)
+  volume,     
   setVolume,
-  muted,          // viene de App (persistente)
+  muted,          
   setMuted,
 }) {
   const { focus, short, long } = durations;
 
-  // --- cargar playlist desde /public/songs/playlist.json
+
   const [playlist, setPlaylist] = useState([]);
   useEffect(() => {
     let alive = true;
@@ -29,17 +29,17 @@ export default function MainPanel({
         const res = await fetch("/songs/playlist.json", { cache: "no-cache" });
         const json = await res.json();
         if (!alive) return;
-        // Permitimos strings o {src,title}
+
         const norm = Array.isArray(json) ? json : [];
         setPlaylist(norm);
       } catch {
-        setPlaylist([]); // tolerante
+        setPlaylist([]); 
       }
     })();
     return () => { alive = false; };
   }, []);
 
-  // Pomodoro (ding usa volumen/mute global)
+
   const P = usePomodoro({
     focusMin: focus,
     shortMin: short,
@@ -49,13 +49,13 @@ export default function MainPanel({
     muted,
   });
 
-  // Música con la misma config + shuffle
+
   const music = usePlayer({ playlist, volume, muted, shuffle: true });
 
   const onPlayClick = () => {
-    P.enableSound?.();   // desbloquea audio para notis
+    P.enableSound?.();   
     P.setRunning(true);
-    music.play?.();      // opcional: acompaña al pomodoro
+    music.play?.();     
   };
 
   const onPauseClick = () => {
@@ -66,7 +66,6 @@ export default function MainPanel({
   const onStopClick = () => {
     P.setRunning(false);
     P.setSeconds(P.totalSec);
-    // si querés también: music.pause?.(); music.seekRatio?.(0);
   };
 
   return (

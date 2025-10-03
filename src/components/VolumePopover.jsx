@@ -6,7 +6,6 @@ export default function VolumePopover({ muted, setMuted, volume, setVolume }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
-  // cerrar al click fuera
   useEffect(() => {
     const onDoc = (e) => {
       if (!ref.current) return;
@@ -16,10 +15,8 @@ export default function VolumePopover({ muted, setMuted, volume, setVolume }) {
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
-  // porcentaje para “track lleno”
   const pct = useMemo(() => Math.max(0, Math.min(100, Math.round(volume * 100))), [volume]);
 
-  // al mover el slider sincronizamos mute
   const onSlide = (v) => {
     const val = Math.max(0, Math.min(1, parseFloat(v)));
     setVolume(val);
@@ -44,7 +41,6 @@ export default function VolumePopover({ muted, setMuted, volume, setVolume }) {
                      data-[state=closed]:opacity-0 data-[state=closed]:scale-95"
           data-state={open ? "open" : "closed"}
         >
-          {/* Slider progresivo minimal */}
           <div className="relative">
             <input
               aria-label="Volume"
@@ -55,7 +51,6 @@ export default function VolumePopover({ muted, setMuted, volume, setVolume }) {
               className="h-2 w-full appearance-none rounded-full outline-none
                          bg-[var(--border-2)]
                          transition-[background-size] duration-150"
-              // Técnica: capa superior coloreada con background-size dinámico
               style={{
                 backgroundImage: "linear-gradient(var(--accent), var(--accent))",
                 backgroundRepeat: "no-repeat",
@@ -64,7 +59,6 @@ export default function VolumePopover({ muted, setMuted, volume, setVolume }) {
               }}
             />
 
-            {/* Thumb estilizado */}
             <style>{`
               input[type="range"]::-webkit-slider-thumb {
                 -webkit-appearance: none;
@@ -90,7 +84,6 @@ export default function VolumePopover({ muted, setMuted, volume, setVolume }) {
             `}</style>
           </div>
 
-          {/* caret */}
           <div
             className="absolute -bottom-1 right-3 w-3 h-3 rotate-45
                        bg-[var(--card)] border-r border-b border-[var(--border-1)]"

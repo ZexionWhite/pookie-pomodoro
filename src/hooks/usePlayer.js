@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function usePlayer({
-  playlist,            // ["url.mp3"] o [{src, title}]
+  playlist,            
   volume = 0.7,
   muted = false,
   shuffle = true,
   loop = false,
 }) {
-  // Normalizar playlist → [{src,title}]
+
   const meta = useMemo(() => {
     const arr = Array.isArray(playlist) ? playlist : [];
     return arr
@@ -23,7 +23,6 @@ export default function usePlayer({
   const [current, setCurrent] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Crear <audio> una sola vez
   if (!audioRef.current) {
     const a = new Audio();
     a.preload = "metadata";
@@ -32,16 +31,13 @@ export default function usePlayer({
   }
   const a = audioRef.current;
 
-  // Track actual seguro
   const track = meta.length ? meta[(index + meta.length) % meta.length] : null;
 
-  // Listeners + cargar fuente
   useEffect(() => {
     if (!a) return;
 
     const onLoaded = () => {
       setDuration(Number.isFinite(a.duration) ? a.duration : 0);
-      // aplicar vol/mute por si el load resetea algo
       a.muted = !!muted;
       a.volume = clamp01(volume);
     };
@@ -54,7 +50,6 @@ export default function usePlayer({
         a.play().catch(() => {});
         return;
       }
-      // pasar al siguiente y mantener play
       next(true);
     };
 
@@ -71,14 +66,12 @@ export default function usePlayer({
     };
   }, [a, loop, muted, volume]);
 
-  // Aplicar vol/mute en caliente
   useEffect(() => {
     if (!a) return;
     a.muted = !!muted;
     a.volume = clamp01(volume);
   }, [a, volume, muted]);
 
-  // Cuando cambia playlist, corregir índice si hace falta y cargar tema
   useEffect(() => {
     if (!a || !meta.length) {
       setDuration(0);
@@ -87,23 +80,18 @@ export default function usePlayer({
     }
     const nextIndex = Math.min(index, meta.length - 1);
     if (nextIndex !== index) setIndex(nextIndex);
-    // Cargar el tema actual y reproducir si ya veníamos en play
     a.src = meta[nextIndex].src;
     a.currentTime = 0;
     if (isPlaying) a.play().catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meta]);
 
-  // Cuando cambia el índice, cargar ese tema y seguir reproduciendo si corresponde
   useEffect(() => {
     if (!a || !track?.src) return;
     a.src = track.src;
     a.currentTime = 0;
     if (isPlaying) a.play().catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, track?.src]);
 
-  /* ---- Controles ---- */
   async function play() {
     if (!a || !track?.src) return;
     try {
@@ -141,7 +129,6 @@ export default function usePlayer({
       }
       return (i + 1) % meta.length;
     });
-    // si venimos del 'ended' o ya estaba tocando, mantener reproducción
     if (fromAuto || isPlaying) setIsPlaying(true);
   }
 
@@ -154,7 +141,6 @@ export default function usePlayer({
   const pos = useMemo(() => (duration ? current / duration : 0), [current, duration]);
 
   return {
-    // Estado expuesto
     isPlaying,
     duration,
     current,
@@ -164,7 +150,6 @@ export default function usePlayer({
     title: track?.title || (track?.src ? fileTitle(track.src) : "—"),
     list: meta,
 
-    // Controles
     play,
     pause,
     toggle,
@@ -176,7 +161,6 @@ export default function usePlayer({
   };
 }
 
-/* utils */
 function fileTitle(url) {
   try {
     const name = decodeURIComponent(url.split("/").pop() || "");
